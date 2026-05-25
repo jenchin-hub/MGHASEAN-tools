@@ -211,14 +211,14 @@
 //  填入你的 Google Forms 設定
 //  取得方式：預覽表單 → 網址取 FORM_ID → 原始碼找 entry.XXXX
 // ══════════════════════════════════════════════════════════
-var FORM_ID    = '15b-H_gS68Wa-jxwyMHNzqHFpTfEGiduT6thvtOO_fDM';   // ← 換成你的 Form ID
+var FORM_ID    = 'YOUR_GOOGLE_FORM_ID';   // ← 換成你的 Form ID
 var ENTRY = {
-  company : 'entry.373439891', // 公司名稱
-  title   : 'entry.1831797635',           // 職稱
-  phone   : 'entry.971298304',            // 電話
-  email   : 'entry.878736686',            // Email
-  market  : 'entry.1041528907',           // 市場（核取方塊，多值同一 entry）
-  pain    : 'entry.96713797'              // 困難（單選）
+  company : 'entry.XXXXXXXXX',           // ← 公司名稱的 entry ID
+  title   : 'entry.XXXXXXXXX',           // ← 職稱
+  phone   : 'entry.XXXXXXXXX',           // ← 電話
+  email   : 'entry.XXXXXXXXX',           // ← Email
+  market  : 'entry.XXXXXXXXX',           // ← 市場（核取方塊，多值同一 entry）
+  pain    : 'entry.XXXXXXXXX'            // ← 困難（單選）
 };
 // ══════════════════════════════════════════════════════════
 
