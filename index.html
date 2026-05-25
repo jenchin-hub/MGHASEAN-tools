@@ -357,20 +357,12 @@ function getCheckedItems(){
 function silentSubmit(){
   if(submitted||checked===0) return;
   submitted=true;
-  var ts=Date.now();
-  var iframe=document.createElement('iframe');
-  iframe.style.display='none'; iframe.name='cl_'+ts;
-  document.body.appendChild(iframe);
-  var form=document.createElement('form');
-  form.method='POST';
-  form.action='https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse';
-  form.target=iframe.name;
-  var f1=document.createElement('input'); f1.type='hidden'; f1.name=ENTRY_SCORE;
-  f1.value=checked+' / '+total+'（'+getVerdict(checked)[2]+'）'; form.appendChild(f1);
-  var f2=document.createElement('input'); f2.type='hidden'; f2.name=ENTRY_ITEMS;
-  f2.value=getCheckedItems(); form.appendChild(f2);
-  document.body.appendChild(form); form.submit();
-  setTimeout(function(){ try{document.body.removeChild(form);document.body.removeChild(iframe);}catch(e){} },5000);
+  var fd=new FormData();
+  fd.append(ENTRY_SCORE, checked+' / '+total+'（'+getVerdict(checked)[2]+'）');
+  fd.append(ENTRY_ITEMS, getCheckedItems());
+  fetch('https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse',{
+    method:'POST', mode:'no-cors', body:fd
+  }).catch(function(){});
 }
 
 window.addEventListener('beforeunload',function(){ if(!submitted&&checked>0) silentSubmit(); });

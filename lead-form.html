@@ -251,50 +251,18 @@ function submitForm(){
   btn.disabled = true;
   btn.textContent = '送出中…';
 
-  // 組成 Google Forms 送出 URL（no-cors iframe trick）
-  var base = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse?';
-  var params = [
-    ENTRY.company + '=' + encodeURIComponent(company),
-    ENTRY.title   + '=' + encodeURIComponent(title),
-    ENTRY.phone   + '=' + encodeURIComponent(phone),
-    ENTRY.email   + '=' + encodeURIComponent(email),
-    ENTRY.pain    + '=' + encodeURIComponent(pains[0])
-  ];
-  markets.forEach(function(m){
-    params.push(ENTRY.market + '=' + encodeURIComponent(m));
-  });
+  // fetch no-cors 送出到 Google Forms
+  var fd = new FormData();
+  fd.append(ENTRY.company, company);
+  fd.append(ENTRY.title,   title);
+  fd.append(ENTRY.phone,   phone);
+  fd.append(ENTRY.email,   email);
+  fd.append(ENTRY.pain,    pains[0]);
+  markets.forEach(function(m){ fd.append(ENTRY.market, m); });
 
-  // 用隱藏 iframe 送出（避免跨域問題）
-  var iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.name = 'hidden_iframe';
-  document.body.appendChild(iframe);
-
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse';
-  form.target = 'hidden_iframe';
-
-  var allFields = {};
-  allFields[ENTRY.company] = company;
-  allFields[ENTRY.title]   = title;
-  allFields[ENTRY.phone]   = phone;
-  allFields[ENTRY.email]   = email;
-  allFields[ENTRY.pain]    = pains[0];
-
-  Object.keys(allFields).forEach(function(k){
-    var inp = document.createElement('input');
-    inp.type = 'hidden'; inp.name = k; inp.value = allFields[k];
-    form.appendChild(inp);
-  });
-  markets.forEach(function(m){
-    var inp = document.createElement('input');
-    inp.type = 'hidden'; inp.name = ENTRY.market; inp.value = m;
-    form.appendChild(inp);
-  });
-
-  document.body.appendChild(form);
-  form.submit();
+  fetch('https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse', {
+    method: 'POST', mode: 'no-cors', body: fd
+  }).catch(function(){});  // no-cors 永遠觸發 catch，忽略即可
 
   setTimeout(function(){
     document.getElementById('formView').style.display = 'none';
