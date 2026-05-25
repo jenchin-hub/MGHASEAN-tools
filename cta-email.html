@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演講話術 & Email 模板｜MGHBIO 大鬍子藥師</title>
+<style>
+  :root {
+    --teal:#0F6E56;--teal-mid:#1D9E75;--teal-light:#E1F5EE;--teal-border:#9FE1CB;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-border:#FAC775;
+    --text:#1a1a1a;--text-muted:#6b7280;--border:#e5e7eb;
+    --bg:#ffffff;--bg-soft:#f9fafb;--radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;padding:2rem 1rem 4rem}
+  .wrap{max-width:640px;margin:0 auto}
+  .page-title{font-size:22px;font-weight:700;margin-bottom:4px}
+  .page-sub{font-size:13px;color:var(--text-muted);margin-bottom:1.5rem}
+
+  /* tabs */
+  .tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
+  .tab{padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;background:none;border-top:none;border-left:none;border-right:none}
+  .tab.on{color:var(--teal);border-bottom-color:var(--teal)}
+  .pane{display:none}
+  .pane.on{display:block}
+
+  /* script cards */
+  .script-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+  .script-card.highlight{border:1.5px solid var(--teal)}
+  .stage{font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+  .script-text{font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap}
+  .aside{margin-top:10px;padding:8px 12px;background:var(--amber-light);border:1px solid var(--amber-border);border-radius:8px;font-size:12px;color:var(--amber)}
+  .copy-bar{display:flex;justify-content:flex-end;margin-top:10px}
+  .copy-btn{padding:6px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-muted);cursor:pointer;background:var(--bg-soft)}
+  .copy-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+  /* email */
+  .market-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1rem}
+  .mtab{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;color:var(--text-muted);background:var(--bg)}
+  .mtab.on{background:var(--teal-light);border-color:var(--teal);color:var(--teal);font-weight:500}
+  .email-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .email-head{padding:12px 16px;background:var(--bg-soft);border-bottom:1px solid var(--border)}
+  .email-head .lbl{font-size:11px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+  .email-head .subj{font-size:14px;font-weight:600;color:var(--text)}
+  .email-body{padding:1.25rem 1.5rem;font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap}
+  .highlight-span{background:var(--teal-light);padding:1px 7px;border-radius:4px;color:var(--teal);font-weight:600}
+  .tip-box{border-left:3px solid var(--teal);padding:8px 12px;margin:10px 0;background:var(--teal-light);border-radius:0 8px 8px 0;font-size:13px;color:var(--teal)}
+  .email-foot{padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;background:var(--bg-soft)}
+  .email-copy{padding:7px 16px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer}
+  .email-copy:hover{background:var(--teal-mid)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title">演講話術 & Follow-up Email</div>
+  <div class="page-sub">MGHBIO 大鬍子藥師｜漢方南向顧問事業</div>
+
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab(this,'cta')">演講結尾 CTA 話術稿</button>
+    <button class="tab" onclick="switchTab(this,'email')">24 小時 Follow-up Email</button>
+  </div>
+
+  <!-- CTA 話術稿 -->
+  <div class="pane on" id="pane-cta">
+
+    <div class="script-card">
+      <div class="stage">第一段｜打痛點（60 秒）</div>
+      <div class="script-text" id="s1">各位，聽完今天的內容，我想問一個問題——
+
+有多少家公司其實已經在想南向，
+但是一直沒有真正動起來？
+
+不是因為不想做，
+而是因為不知道從哪裡開始、怕做錯、怕浪費錢。
+
+這是台灣保健食品廠商面對南向時最真實的處境。
+不是缺市場，是缺一個清楚的入場路線圖。</div>
+      <div class="copy-bar"><button class="copy-btn" onclick="copyText('s1')">複製這段</button></div>
+    </div>
+
+    <div class="script-card">
+      <div class="stage">第二段｜亮出工具（30 秒）</div>
+      <div class="script-text" id="s2">我在過去幾年幫台灣廠商評估南向可行性，
+發展出一套「南向策略健檢」的系統——
+
+我們會看你的產品，告訴你：
+哪個 SKU 最適合出海？去哪個市場？
+缺哪些文件？Halal 風險在哪裡？
+然後給你一份可以立刻執行的 90 天路線圖。
+
+不是理論，是你公司真實情況的可行方案。</div>
+      <div class="copy-bar"><button class="copy-btn" onclick="copyText('s2')">複製這段</button></div>
+    </div>
+
+    <div class="script-card highlight">
+      <div class="stage">第三段｜稀缺 CTA（30 秒）——最重要</div>
+      <div class="script-text" id="s3">今天演講結束後，我們開放申請第一批南向策略健檢。
+
+限量 10 家。
+今天在場的廠商享有演講特別方案。
+
+螢幕上的 QR Code，或是桌上的卡片，
+掃碼填寫一份 90 秒的表單。
+
+我們會在明天早上 10 點前聯繫您。
+
+謝謝各位。</div>
+      <div class="aside">投影片最後一頁：大 QR Code + 「限量 10 家｜掃碼申請南向策略健檢」</div>
+      <div class="copy-bar"><button class="copy-btn" onclick="copyText('s3')">複製這段</button></div>
+    </div>
+
+    <div class="script-card">
+      <div class="stage">自由交流 15 分鐘用語（演講後）</div>
+      <div class="script-text" id="s4">對廠商說：
+「請問你們目前有在看哪個市場？馬來西亞？泰國？
+——我剛好有這個國家的具體案例，可以跟你說一下我們怎麼評估。」
+
+對供應商 / 同業說：
+「你在供應鏈哪一段？
+我正在建立一個漢方南向的合作夥伴網絡，
+如果你有獨特的原料或製造能力，我們可以聊聊合作方式。」</div>
+      <div class="copy-bar"><button class="copy-btn" onclick="copyText('s4')">複製這段</button></div>
+    </div>
+
+  </div>
+
+  <!-- Email 模板 -->
+  <div class="pane" id="pane-email">
+
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">根據 Lead Form「最想進入的市場」選擇版本寄出</p>
+
+    <div class="market-tabs">
+      <button class="mtab on" onclick="switchMarket(this,'my')">🇲🇾 馬來西亞</button>
+      <button class="mtab" onclick="switchMarket(this,'sg')">🇸🇬 新加坡</button>
+      <button class="mtab" onclick="switchMarket(this,'th')">🇹🇭 泰國</button>
+      <button class="mtab" onclick="switchMarket(this,'vn')">🇻🇳 越南</button>
+      <button class="mtab" onclick="switchMarket(this,'id')">🇮🇩 印尼</button>
+    </div>
+
+    <div class="email-card">
+      <div class="email-head">
+        <div class="lbl">主旨</div>
+        <div class="subj" id="eSubj"></div>
+      </div>
+      <div class="email-body" id="eBody"></div>
+      <div class="email-foot">
+        <button class="email-copy" onclick="copyEmail()">複製完整 Email</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var emails = {
+  my:{flag:'🇲🇾',market:'馬來西亞',
+    subj:'感謝您參與今日演講 + 您的南向 Checklist｜MGHBIO 大鬍子藥師',
+    hook:'馬來西亞是台灣保健食品最具潛力的南向首站——但 Halal 認證和產品分類是最容易踩到的兩個地雷。',
+    tip:'馬來西亞 NPRA 要求保健食品先登記 MAL 號碼；Halal 認證建議選 JAKIM 認可機構，申請週期約 3–6 個月。'},
+  sg:{flag:'🇸🇬',market:'新加坡',
+    subj:'感謝您參與今日演講 + 您的南向 Checklist｜MGHBIO 大鬍子藥師',
+    hook:'新加坡是進軍東南亞的橋頭堡——法規相對清晰，但定價競爭激烈，品牌差異化是關鍵。',
+    tip:'新加坡 HSA 對保健食品採「禁止清單」制度，未列管成分通常無需事先註冊，但宣稱管制嚴格，不能涉及疾病治療文字。'},
+  th:{flag:'🇹🇭',market:'泰國',
+    subj:'感謝您參與今日演講 + 您的南向 Checklist｜MGHBIO 大鬍子藥師',
+    hook:'泰國保健食品市場年成長超過 10%，但 FDA 申請週期長、宣稱限制多，很多台灣廠商在這關卡關。',
+    tip:'泰國 FDA 將保健食品分為 Special Control / General Food 兩類，中草藥成分多被歸為特管類，申請前的成分預審非常重要。'},
+  vn:{flag:'🇻🇳',market:'越南',
+    subj:'感謝您參與今日演講 + 您的南向 Checklist｜MGHBIO 大鬍子藥師',
+    hook:'越南是東南亞成長最快的保健食品市場之一，中草藥接受度高——但法規申請週期和文件要求常讓廠商卡關。',
+    tip:'越南 DAV 對功能性食品要求提交第三方安全報告，所有文件需越文公證，建議提前至少一年開始準備。'},
+  id:{flag:'🇮🇩',market:'印尼',
+    subj:'感謝您參與今日演講 + 您的南向 Checklist｜MGHBIO 大鬍子藥師',
+    hook:'印尼是東南亞最大穆斯林消費市場，保健食品需求龐大——但 BPOM 申請嚴格，MUI Halal 認證是進市場的必要門票。',
+    tip:'印尼 BPOM 要求進口保健食品需有當地代理商協助申請，膠囊選材是第一道關卡，務必提前確認。'}
+};
+
+var curMarket='my';
+
+function buildEmailText(id){
+  var e=emails[id];
+  return '[公司名稱] [職稱] 您好，\n\n感謝您今天撥冗參與演講，也感謝您填寫了南向健檢申請表單。\n\n您表示最有興趣的市場是 '+e.flag+' '+e.market+'。\n\n'+e.hook+'\n\n這裡有一個關鍵資訊想先和您分享：\n\n'+e.tip+'\n\n附件是今天演講的《漢方南向出口自評 Checklist》，您可以先做個初步評估，了解目前的準備狀況。\n\n我們預計在 48 小時內與您安排一個 15 分鐘的電話，針對您的情況做進一步說明。\n\n如果您希望盡快預約，也可以直接回信告知方便時間。\n\n大鬍子藥師 DR.BU\nMGHBIO 漢方南向顧問';
+}
+
+function renderEmail(id){
+  curMarket=id;
+  var e=emails[id];
+  document.getElementById('eSubj').textContent=e.subj;
+  document.getElementById('eBody').textContent=buildEmailText(id);
+}
+
+function switchMarket(btn,id){
+  document.querySelectorAll('.mtab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');
+  renderEmail(id);
+}
+
+function switchTab(btn,id){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});
+  btn.classList.add('on');
+  document.getElementById('pane-'+id).classList.add('on');
+}
+
+function copyText(id){
+  var el=document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent.trim()).then(function(){
+    var btn=el.parentNode.querySelector('.copy-btn');
+    var orig=btn.textContent; btn.textContent='✓ 已複製';
+    setTimeout(function(){btn.textContent=orig;},1500);
+  });
+}
+
+function copyEmail(){
+  var e=emails[curMarket];
+  var txt='主旨：'+e.subj+'\n\n'+buildEmailText(curMarket);
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn=document.querySelector('.email-copy');
+    var orig=btn.textContent; btn.textContent='✓ 已複製';
+    setTimeout(function(){btn.textContent=orig;},1500);
+  });
+}
+
+renderEmail('my');
+</script>
+</body>
+</html>
