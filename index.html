@@ -301,7 +301,7 @@ function toggle(el){
   updateUI();
   submitted = false;
   clearTimeout(submitTimer);
-  submitTimer = setTimeout(silentSubmit, 3000);
+  submitTimer = setTimeout(silentSubmit, 2000);
 }
 
 function updateUI(){
@@ -354,16 +354,26 @@ function getCheckedItems(){
   return items.join(' | ');
 }
 
+var GAS_URL='https://script.google.com/macros/s/AKfycbwwTiJFgbKfQ-tHEcHzDoU9IRQwmGcXmviBSNjTciI8vFtdHGxfr3Ys5ROCSMEkBG8GmA/exec';
+
 function silentSubmit(){
-  if(submitted||checked===0) return;
+  if(checked===0) return;
   submitted=true;
-  var GAS_URL='https://script.google.com/macros/s/AKfycbwwTiJFgbKfQ-tHEcHzDoU9IRQwmGcXmviBSNjTciI8vFtdHGxfr3Ys5ROCSMEkBG8GmA/exec';
-  var p='score='+encodeURIComponent(checked+' / '+total+'（'+getVerdict(checked)[2]+'）')
-      +'&items='+encodeURIComponent(getCheckedItems());
-  new Image().src=GAS_URL+'?'+p;
+  var scoreText=checked+' / '+total+' '+getVerdict(checked)[2];
+  var checkedEls=document.querySelectorAll('.cb.on');
+  var itemList=[];
+  for(var i=0;i<checkedEls.length;i++){
+    var t=checkedEls[i].parentNode.querySelector('.item-text');
+    if(t) itemList.push(t.textContent.trim());
+  }
+  var itemText=itemList.join(' | ');
+  var url=GAS_URL+'?score='+encodeURIComponent(scoreText)+'&items='+encodeURIComponent(itemText);
+  var img=new Image();
+  img.src=url;
+  console.log('silentSubmit fired:', url);
 }
 
-window.addEventListener('beforeunload',function(){ if(!submitted&&checked>0) silentSubmit(); });
+window.addEventListener('beforeunload',function(){ if(checked>0) silentSubmit(); });
 </script>
 </body>
 </html>
