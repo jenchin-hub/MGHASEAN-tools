@@ -251,6 +251,12 @@ function submitForm(){
   btn.disabled = true;
   btn.textContent = '送出中…';
 
+  // 從 URL 讀取自評分數（從 index.html 帶過來）
+  var urlParams = new URLSearchParams(window.location.search);
+  var score   = urlParams.get('score')   || '';
+  var verdict = urlParams.get('verdict') || '';
+  var scoreText = score && verdict ? score + '（' + verdict + '）' : score;
+
   // 送出到 Google Apps Script
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbwwTiJFgbKfQ-tHEcHzDoU9IRQwmGcXmviBSNjTciI8vFtdHGxfr3Ys5ROCSMEkBG8GmA/exec';
   var params = 'company=' + encodeURIComponent(company)
@@ -258,7 +264,8 @@ function submitForm(){
     + '&phone='   + encodeURIComponent(phone)
     + '&email='   + encodeURIComponent(email)
     + '&pain='    + encodeURIComponent(pains[0])
-    + '&market='  + encodeURIComponent(markets.join('、'));
+    + '&market='  + encodeURIComponent(markets.join('、'))
+    + '&score='   + encodeURIComponent(scoreText);
 
   var img = new Image();
   img.src = GAS_URL + '?' + params;
