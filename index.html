@@ -357,15 +357,10 @@ function getCheckedItems(){
 function silentSubmit(){
   if(submitted||checked===0) return;
   submitted=true;
-  var params=[];
-  params.push(ENTRY_SCORE+'='+encodeURIComponent(checked+' / '+total+'（'+getVerdict(checked)[2]+'）'));
-  params.push(ENTRY_ITEMS+'='+encodeURIComponent(getCheckedItems()));
-  params.push('submit=Submit');
-  var iframe=document.createElement('iframe');
-  iframe.style.display='none';
-  iframe.src='https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse?'+params.join('&');
-  document.body.appendChild(iframe);
-  setTimeout(function(){ try{document.body.removeChild(iframe);}catch(e){} },5000);
+  var GAS_URL='https://script.google.com/macros/s/AKfycbwwTiJFgbKfQ-tHEcHzDoU9IRQwmGcXmviBSNjTciI8vFtdHGxfr3Ys5ROCSMEkBG8GmA/exec';
+  var p='score='+encodeURIComponent(checked+' / '+total+'（'+getVerdict(checked)[2]+'）')
+      +'&items='+encodeURIComponent(getCheckedItems());
+  new Image().src=GAS_URL+'?'+p;
 }
 
 window.addEventListener('beforeunload',function(){ if(!submitted&&checked>0) silentSubmit(); });
