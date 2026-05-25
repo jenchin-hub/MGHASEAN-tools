@@ -251,23 +251,32 @@ function submitForm(){
   btn.disabled = true;
   btn.textContent = '送出中…';
 
-  // fetch no-cors 送出到 Google Forms
-  var fd = new FormData();
-  fd.append(ENTRY.company, company);
-  fd.append(ENTRY.title,   title);
-  fd.append(ENTRY.phone,   phone);
-  fd.append(ENTRY.email,   email);
-  fd.append(ENTRY.pain,    pains[0]);
-  markets.forEach(function(m){ fd.append(ENTRY.market, m); });
+  // 先顯示成功畫面，再用隱藏 form GET 送出（最相容方式）
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').style.display = 'block';
 
-  fetch('https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse', {
-    method: 'POST', mode: 'no-cors', body: fd
-  }).catch(function(){});  // no-cors 永遠觸發 catch，忽略即可
+  // 建立 URL query string 送出（GET prefill URL，Google Forms 官方支援）
+  var params = [];
+  params.push(ENTRY.company + '=' + encodeURIComponent(company));
+  params.push(ENTRY.title   + '=' + encodeURIComponent(title));
+  params.push(ENTRY.phone   + '=' + encodeURIComponent(phone));
+  params.push(ENTRY.email   + '=' + encodeURIComponent(email));
+  params.push(ENTRY.pain    + '=' + encodeURIComponent(pains[0]));
+  markets.forEach(function(m){
+    params.push(ENTRY.market + '=' + encodeURIComponent(m));
+  });
+  params.push('submit=Submit');
 
+  var submitUrl = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse?' + params.join('&');
+
+  // 用隱藏 iframe GET 送出
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = submitUrl;
+  document.body.appendChild(iframe);
   setTimeout(function(){
-    document.getElementById('formView').style.display = 'none';
-    document.getElementById('successView').style.display = 'block';
-  }, 800);
+    try{ document.body.removeChild(iframe); }catch(e){}
+  }, 5000);
 }
 </script>
 </body>

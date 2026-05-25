@@ -357,12 +357,15 @@ function getCheckedItems(){
 function silentSubmit(){
   if(submitted||checked===0) return;
   submitted=true;
-  var fd=new FormData();
-  fd.append(ENTRY_SCORE, checked+' / '+total+'（'+getVerdict(checked)[2]+'）');
-  fd.append(ENTRY_ITEMS, getCheckedItems());
-  fetch('https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse',{
-    method:'POST', mode:'no-cors', body:fd
-  }).catch(function(){});
+  var params=[];
+  params.push(ENTRY_SCORE+'='+encodeURIComponent(checked+' / '+total+'（'+getVerdict(checked)[2]+'）'));
+  params.push(ENTRY_ITEMS+'='+encodeURIComponent(getCheckedItems()));
+  params.push('submit=Submit');
+  var iframe=document.createElement('iframe');
+  iframe.style.display='none';
+  iframe.src='https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse?'+params.join('&');
+  document.body.appendChild(iframe);
+  setTimeout(function(){ try{document.body.removeChild(iframe);}catch(e){} },5000);
 }
 
 window.addEventListener('beforeunload',function(){ if(!submitted&&checked>0) silentSubmit(); });
