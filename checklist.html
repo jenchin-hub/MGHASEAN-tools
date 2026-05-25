@@ -239,19 +239,30 @@
 </div>
 
 <script>
+// ── Google Forms 靜默送出設定 ──────────────────────────────
+var FORM_ID     = '15b-H_gS68Wa-jxwyMHNzqHFpTfEGiduT6thvtOO_fDM';
+var ENTRY_SCORE = 'entry.1770538217';
+var ENTRY_ITEMS = 'entry.281316200';
+// ──────────────────────────────────────────────────────────
+
 var total = 15, checked = 0;
+var submitted = false;
+var submitTimer = null;
+
 var verdicts = [
   [0,  4, '準備起步', '目前有幾個關鍵缺口，建議先進行完整南向可行性評估，避免走冤枉路。'],
   [5,  8, '初步就緒', '基礎已建立，但仍有幾個高風險盲點需補強，特別是法規和 Halal 面向。'],
   [9, 12, '穩健前進', '準備程度不錯！建議針對目標市場做精準的 GTM 策略規劃。'],
   [13,15, '出海就緒', '恭喜！您的公司南向準備相當完整，可以啟動正式市場進入計畫。']
 ];
+
 function getVerdict(n){
   for(var i=0;i<verdicts.length;i++){
     if(n>=verdicts[i][0]&&n<=verdicts[i][1]) return verdicts[i];
   }
   return verdicts[0];
 }
+
 function toggle(el){
   var cb=el.querySelector('.cb');
   if(cb.classList.contains('on')){ cb.classList.remove('on'); checked--; }
@@ -262,7 +273,59 @@ function toggle(el){
   document.getElementById('barFill').style.width=Math.round(checked/total*100)+'%';
   document.getElementById('verdictTitle').textContent=v[2];
   document.getElementById('verdictHint').textContent=v[3];
+
+  // debounce：停止勾選 3 秒後靜默送出
+  submitted = false;
+  clearTimeout(submitTimer);
+  submitTimer = setTimeout(silentSubmit, 3000);
 }
+
+function getCheckedItems(){
+  var items = [];
+  document.querySelectorAll('.cb.on').forEach(function(cb){
+    var text = cb.parentNode.querySelector('.item-text');
+    if(text) items.push(text.textContent.trim());
+  });
+  return items.join(' | ');
+}
+
+function silentSubmit(){
+  if(submitted || checked === 0) return;
+  submitted = true;
+
+  var ts = Date.now();
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.name = 'cl_' + ts;
+  document.body.appendChild(iframe);
+
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse';
+  form.target  = iframe.name;
+
+  var f1 = document.createElement('input');
+  f1.type = 'hidden'; f1.name = ENTRY_SCORE;
+  f1.value = checked + ' / ' + total + '（' + getVerdict(checked)[2] + '）';
+  form.appendChild(f1);
+
+  var f2 = document.createElement('input');
+  f2.type = 'hidden'; f2.name = ENTRY_ITEMS;
+  f2.value = getCheckedItems();
+  form.appendChild(f2);
+
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(function(){
+    try{ document.body.removeChild(form); document.body.removeChild(iframe); }catch(e){}
+  }, 5000);
+}
+
+// 離開頁面時補送一次
+window.addEventListener('beforeunload', function(){
+  if(!submitted && checked > 0) silentSubmit();
+});
 </script>
 </body>
 </html>

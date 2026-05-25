@@ -3,53 +3,377 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>漢方南向工具包｜MGHBIO 大鬍子藥師</title>
+<title>漢方南向出口自評｜MGHBIO 大鬍子藥師</title>
 <style>
-  :root{--teal:#0F6E56;--teal-mid:#1D9E75;--teal-light:#E1F5EE;--teal-border:#9FE1CB;--text:#1a1a1a;--text-muted:#6b7280;--border:#e5e7eb;--bg:#fff;--bg-soft:#f9fafb}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem}
-  .hero{text-align:center;margin-bottom:2.5rem}
-  .badge{display:inline-block;background:var(--teal-light);color:var(--teal);font-size:12px;padding:4px 14px;border-radius:20px;font-weight:500;margin-bottom:12px}
-  .hero h1{font-size:28px;font-weight:700;margin-bottom:6px}
-  .hero p{font-size:15px;color:var(--text-muted)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:780px;width:100%}
-  .card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:var(--text);transition:border-color .15s,box-shadow .15s;display:flex;flex-direction:column;gap:8px}
-  .card:hover{border-color:var(--teal);box-shadow:0 4px 16px rgba(15,110,86,.08)}
-  .card .icon{width:40px;height:40px;background:var(--teal-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:4px}
-  .card h2{font-size:16px;font-weight:600}
-  .card p{font-size:13px;color:var(--text-muted);line-height:1.5}
-  .card .arrow{font-size:13px;color:var(--teal);font-weight:500;margin-top:4px}
-  .footer{margin-top:2rem;font-size:12px;color:var(--text-muted);text-align:center}
+  :root {
+    --teal:       #0F6E56;
+    --teal-mid:   #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-border:#9FE1CB;
+    --amber:      #BA7517;
+    --amber-light:#FAEEDA;
+    --amber-border:#FAC775;
+    --red:        #C0392B;
+    --red-light:  #FDECEA;
+    --red-border: #F5B7B1;
+    --text:       #1a1a1a;
+    --text-muted: #6b7280;
+    --border:     #e5e7eb;
+    --bg:         #ffffff;
+    --bg-soft:    #f9fafb;
+    --radius:     10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg-soft);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 5rem;
+  }
+  .wrap { max-width: 600px; margin: 0 auto; }
+
+  /* header */
+  .header { margin-bottom: 1.5rem; }
+  .badge { display: inline-block; background: var(--teal-light); color: var(--teal); font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; margin-bottom: 10px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .header p  { font-size: 13px; color: var(--text-muted); }
+
+  /* score bar */
+  .score-card { background: var(--teal-light); border: 1px solid var(--teal-border); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; transition: background .3s, border-color .3s; }
+  .score-card.amber { background: var(--amber-light); border-color: var(--amber-border); }
+  .score-card.amber .score-num,
+  .score-card.amber .score-label,
+  .score-card.amber .score-pct,
+  .score-card.amber .verdict,
+  .score-card.amber .verdict-hint { color: var(--amber); }
+  .score-card.amber .bar-bg { background: var(--amber-border); }
+  .score-card.amber .bar-fill { background: var(--amber); }
+  .score-card.red { background: var(--red-light); border-color: var(--red-border); }
+  .score-card.red .score-num,
+  .score-card.red .score-label,
+  .score-card.red .score-pct,
+  .score-card.red .verdict,
+  .score-card.red .verdict-hint { color: var(--red); }
+  .score-card.red .bar-bg { background: var(--red-border); }
+  .score-card.red .bar-fill { background: var(--red); }
+
+  .score-top { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+  .score-num { font-size: 44px; font-weight: 700; color: var(--teal); line-height: 1; min-width: 56px; }
+  .score-right { flex: 1; }
+  .score-label { font-size: 12px; color: var(--teal); margin-bottom: 6px; }
+  .bar-bg { height: 8px; background: var(--teal-border); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--teal); border-radius: 4px; transition: width .4s ease; }
+  .score-pct { font-size: 13px; color: var(--teal); font-weight: 600; white-space: nowrap; }
+  .verdict { font-size: 15px; font-weight: 600; color: var(--teal); margin-bottom: 4px; }
+  .verdict-hint { font-size: 13px; color: var(--teal); opacity: .85; line-height: 1.5; }
+
+  /* sections */
+  .section { margin-bottom: 1.25rem; background: var(--bg); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+  .sec-head { padding: 10px 16px; background: var(--bg-soft); border-bottom: 1px solid var(--border); }
+  .sec-head h2 { font-size: 12px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .06em; }
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: var(--bg-soft); }
+  .cb { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; font-size: 13px; color: #fff; }
+  .cb.on { background: var(--teal); border-color: var(--teal); }
+  .cb.on::after { content: '✓'; }
+  .item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+  .item-hint { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .warn { font-size: 12px; color: var(--amber); background: var(--amber-light); border: 1px solid var(--amber-border); border-radius: 6px; padding: 4px 8px; margin-top: 4px; display: inline-block; }
+
+  /* dynamic CTA */
+  .cta-wrap { margin-top: 1.5rem; display: none; }
+  .cta-wrap.show { display: block; }
+  .cta-box {
+    border-radius: 14px; padding: 1.5rem;
+    text-align: center; border: 1.5px solid;
+    transition: all .3s;
+  }
+  .cta-box.teal   { background: var(--teal-light);  border-color: var(--teal-border); }
+  .cta-box.amber  { background: var(--amber-light); border-color: var(--amber-border); }
+  .cta-box.red    { background: var(--red-light);   border-color: var(--red-border); }
+  .cta-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .cta-title.teal  { color: var(--teal); }
+  .cta-title.amber { color: var(--amber); }
+  .cta-title.red   { color: var(--red); }
+  .cta-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+  .cta-btn {
+    display: inline-block; padding: 12px 28px;
+    border-radius: var(--radius); font-size: 15px; font-weight: 600;
+    text-decoration: none; color: #fff; transition: opacity .15s; border: none; cursor: pointer;
+  }
+  .cta-btn:hover { opacity: .88; }
+  .cta-btn.teal  { background: var(--teal); }
+  .cta-btn.amber { background: var(--amber); }
+  .cta-btn.red   { background: var(--red); }
+  .print-row { margin-top: 10px; }
+  .print-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius); font-size: 13px; padding: 7px 16px; cursor: pointer; }
+  .print-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+  @media print {
+    body { background: #fff; }
+    .cta-wrap { display: none !important; }
+    .score-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
 </style>
 </head>
 <body>
-  <div class="hero">
+<div class="wrap">
+
+  <div class="header">
     <span class="badge">MGHBIO 大鬍子藥師</span>
-    <h1>漢方南向工具包</h1>
-    <p>演講配套工具｜點選進入各頁面</p>
+    <h1>漢方南向出口自評 Checklist</h1>
+    <p>勾選目前已準備好的項目，即時看見您的南向就緒分數。</p>
   </div>
 
-  <div class="grid">
-    <a class="card" href="lead-form.html">
-      <div class="icon">📋</div>
-      <h2>南向健檢申請表</h2>
-      <p>演講現場 QR Code 導向頁面，填寫後資料自動送入 Google Sheet。</p>
-      <span class="arrow">申請健檢 →</span>
-    </a>
-    <a class="card" href="checklist.html">
-      <div class="icon">✅</div>
-      <h2>南向自評 Checklist</h2>
-      <p>15 題即時評分，讓廠商自己發現準備缺口。可列印為 PDF 現場發放。</p>
-      <span class="arrow">開始自評 →</span>
-    </a>
-    <a class="card" href="cta-email.html">
-      <div class="icon">📝</div>
-      <h2>話術 & Email 模板</h2>
-      <p>演講結尾 CTA 三段話術，及依市場分支的 24 小時 Follow-up Email。</p>
-      <span class="arrow">查看模板 →</span>
-    </a>
+  <div class="score-card" id="scoreCard">
+    <div class="score-top">
+      <div class="score-num" id="scoreNum">0</div>
+      <div class="score-right">
+        <div class="score-label">南向就緒分數</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="bar-bg" style="flex:1"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+          <span class="score-pct" id="scorePct">0 / 15</span>
+        </div>
+      </div>
+    </div>
+    <div class="verdict" id="verdictTitle">—</div>
+    <div class="verdict-hint" id="verdictHint">點選下方項目開始評估</div>
   </div>
 
-  <div class="footer">漢方南向顧問事業｜MGHBIO DR.BU Lab</div>
+  <!-- 產品基礎 -->
+  <div class="section">
+    <div class="sec-head"><h2>產品基礎</h2></div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已確定 1–3 個「英雄 SKU」準備主打東南亞</div>
+      <div class="item-hint">並非所有產品都適合出海，集中資源是關鍵</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">產品有英文包裝或可立即製作英文版</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">產品宣稱（功效文字）已用英文重新撰寫</div>
+      <div class="warn">⚠ 直接翻譯中文宣稱是最常見的法規紅線</div></div>
+    </div>
+  </div>
+
+  <!-- 法規文件 -->
+  <div class="section">
+    <div class="sec-head"><h2>法規文件</h2></div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已備齊 COA（Certificate of Analysis）英文版</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">有 GMP 證書且在有效期限內</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">了解目標國的產品分類（藥品／食品／保健食品）</div>
+      <div class="warn">⚠ 分類錯誤會導致整個申請重來</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已備齊或可製作 Free Sale Certificate</div></div>
+    </div>
+  </div>
+
+  <!-- Halal 合規 -->
+  <div class="section">
+    <div class="sec-head"><h2>Halal 合規</h2></div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已確認所有原料來源不含豬源成分</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">膠囊殼材質已確認（植物性或魚膠）</div>
+      <div class="warn">⚠ 明膠膠囊是馬來西亞／印尼市場最常被擋的原因</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已了解 Halal 認證機構及申請流程</div></div>
+    </div>
+  </div>
+
+  <!-- 市場與通路 -->
+  <div class="section">
+    <div class="sec-head"><h2>市場與通路</h2></div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已研究目標市場的競品及定價區間</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">有初步接觸過當地經銷商或買家</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">了解電商平台（Shopee／Lazada）的保健品上架規則</div></div>
+    </div>
+  </div>
+
+  <!-- 內部能量 -->
+  <div class="section">
+    <div class="sec-head"><h2>內部能量</h2></div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">公司內有人可以用英文溝通（郵件、會議）</div></div>
+    </div>
+    <div class="item" onclick="toggle(this)">
+      <div class="cb"></div>
+      <div><div class="item-text">已設定南向目標（如：12 個月內完成第一筆海外訂單）</div></div>
+    </div>
+  </div>
+
+  <!-- 動態 CTA（第一題勾選後出現） -->
+  <div class="cta-wrap" id="ctaWrap">
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-title" id="ctaTitle"></div>
+      <div class="cta-desc"  id="ctaDesc"></div>
+      <button class="cta-btn" id="ctaBtn" onclick="goToForm()"></button>
+      <div class="print-row">
+        <button class="print-btn" onclick="window.print()">列印 / 儲存 PDF</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Google Forms 靜默送出設定 ─────────────────────────────
+var FORM_ID     = '15b-H_gS68Wa-jxwyMHNzqHFpTfEGiduT6thvtOO_fDM';
+var ENTRY_SCORE = 'entry.1770538217';
+var ENTRY_ITEMS = 'entry.281316200';
+// ─────────────────────────────────────────────────────────
+
+var total = 15, checked = 0;
+var submitted = false;
+var submitTimer = null;
+
+// [min, max, label, hint, ctaColor, ctaTitle, ctaDesc, ctaBtn, scoreCardColor]
+var verdicts = [
+  [0,  4,
+   '準備起步',
+   '目前有幾個關鍵缺口，建議先進行完整南向可行性評估，避免走冤枉路。',
+   'red',
+   '⚠ 您有 ' + '#{gaps}' + ' 個關鍵缺口尚未準備',
+   '現在申請南向策略健檢，讓我們幫您釐清優先補強順序，避免入場後才發現踩到地雷。',
+   '立即申請健檢，補強缺口 →',
+   'red'],
+  [5,  8,
+   '初步就緒',
+   '基礎已建立，但仍有幾個高風險盲點需補強，特別是法規和 Halal 面向。',
+   'amber',
+   '您有基礎，但還有幾個高風險盲點',
+   '法規和 Halal 的細節往往在申請時才踩到。申請健檢，讓我們幫您在出發前找出這些盲點。',
+   '申請健檢，提前排除風險 →',
+   'amber'],
+  [9, 12,
+   '穩健前進',
+   '準備程度不錯！建議針對目標市場做精準的 GTM 策略規劃。',
+   'teal',
+   '您已準備好了，缺的是精準 GTM 策略',
+   '產品和文件都到位，下一步是找到對的市場切入點和通路夥伴。我們可以幫您規劃。',
+   '申請 GTM 策略諮詢 →',
+   'teal'],
+  [13,15,
+   '出海就緒',
+   '恭喜！您的公司南向準備相當完整，可以啟動正式市場進入計畫。',
+   'teal',
+   '恭喜！您已高度就緒',
+   '您的準備比大多數廠商完整。現在需要的是找到對的市場夥伴，加速落地執行。',
+   '找到對的市場夥伴 →',
+   'teal']
+];
+
+function getVerdict(n){ for(var i=0;i<verdicts.length;i++){ if(n>=verdicts[i][0]&&n<=verdicts[i][1]) return verdicts[i]; } return verdicts[0]; }
+
+function toggle(el){
+  var cb=el.querySelector('.cb');
+  if(cb.classList.contains('on')){ cb.classList.remove('on'); checked--; }
+  else { cb.classList.add('on'); checked++; }
+  updateUI();
+  submitted = false;
+  clearTimeout(submitTimer);
+  submitTimer = setTimeout(silentSubmit, 3000);
+}
+
+function updateUI(){
+  var v = getVerdict(checked);
+  var gaps = total - checked;
+
+  // score card
+  document.getElementById('scoreNum').textContent = checked;
+  document.getElementById('scorePct').textContent = checked + ' / ' + total;
+  document.getElementById('barFill').style.width = Math.round(checked/total*100)+'%';
+  document.getElementById('verdictTitle').textContent = v[2];
+  document.getElementById('verdictHint').textContent = v[3];
+
+  var sc = document.getElementById('scoreCard');
+  sc.className = 'score-card ' + v[8];
+
+  // CTA — show after first tick
+  if(checked > 0){
+    var wrap = document.getElementById('ctaWrap');
+    wrap.className = 'cta-wrap show';
+
+    var color = v[4];
+    var ctaTitle = v[5].replace('#{gaps}', gaps);
+
+    document.getElementById('ctaBox').className   = 'cta-box ' + color;
+    document.getElementById('ctaTitle').className = 'cta-title ' + color;
+    document.getElementById('ctaTitle').textContent = ctaTitle;
+    document.getElementById('ctaDesc').textContent  = v[6];
+    document.getElementById('ctaBtn').className  = 'cta-btn ' + color;
+    document.getElementById('ctaBtn').textContent = v[7];
+
+    // scroll CTA into view smoothly when it first appears
+    if(checked === 1){
+      setTimeout(function(){ document.getElementById('ctaWrap').scrollIntoView({behavior:'smooth',block:'nearest'}); }, 400);
+    }
+  }
+}
+
+function goToForm(){
+  var v = getVerdict(checked);
+  window.location.href = 'lead-form.html?score=' + checked + '&verdict=' + encodeURIComponent(v[2]);
+}
+
+function getCheckedItems(){
+  var items=[];
+  document.querySelectorAll('.cb.on').forEach(function(cb){
+    var t=cb.parentNode.querySelector('.item-text');
+    if(t) items.push(t.textContent.trim());
+  });
+  return items.join(' | ');
+}
+
+function silentSubmit(){
+  if(submitted||checked===0) return;
+  submitted=true;
+  var ts=Date.now();
+  var iframe=document.createElement('iframe');
+  iframe.style.display='none'; iframe.name='cl_'+ts;
+  document.body.appendChild(iframe);
+  var form=document.createElement('form');
+  form.method='POST';
+  form.action='https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse';
+  form.target=iframe.name;
+  var f1=document.createElement('input'); f1.type='hidden'; f1.name=ENTRY_SCORE;
+  f1.value=checked+' / '+total+'（'+getVerdict(checked)[2]+'）'; form.appendChild(f1);
+  var f2=document.createElement('input'); f2.type='hidden'; f2.name=ENTRY_ITEMS;
+  f2.value=getCheckedItems(); form.appendChild(f2);
+  document.body.appendChild(form); form.submit();
+  setTimeout(function(){ try{document.body.removeChild(form);document.body.removeChild(iframe);}catch(e){} },5000);
+}
+
+window.addEventListener('beforeunload',function(){ if(!submitted&&checked>0) silentSubmit(); });
+</script>
 </body>
 </html>
